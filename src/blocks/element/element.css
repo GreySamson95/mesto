@@ -1,0 +1,18 @@
+@import url("./__photo/element__photo.css");
+@import url("./__description/element__description.css");
+@import url("./__like/element__like.css");
+@import url("./__text/element__text.css");
+@import url("./__delete/element__delete.css");
+@import url("./__like/_active/element__like_active.css");
+
+.element {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    align-items: center;
+    background: white;
+    width: 282px;
+    height: 361px;
+    border-radius: 10px;
+    position: relative;
+}
