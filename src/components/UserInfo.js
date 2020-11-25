@@ -1,18 +1,20 @@
+import { profileNameSelector, profileSelfSelector } from "../constants/constants";
+
 export class UserInfo {
-    constructor(profileName, profileSelf) {
-        this._profileName = document.querySelector(profileName);
-        this._profileSelf = document.querySelector(profileSelf);
+    constructor(profileNameSelector, profileSelfSelector) {
+        this._profileNameSelector = document.querySelector(profileNameSelector)
+        this._profileSelfSelector = document.querySelector(profileSelfSelector)
     }
 
     getUserInfo() {
         return {
-            "name": this._profileName.textContent,
-            "about": this._profileSelf.textContent
+            "name": this._profileNameSelector.textContent,
+            "about": this._profileSelfSelector.textContent
         }
     }
 
-    setUserInfo({ param1, param2, ...rest }) {
-        this._profileName.textContent = param1;
-        this._profileSelf.textContent = param2;
+    setUserInfo({ param1, param2}) {
+        this._profileNameSelector.textContent = param1;
+        this._profileSelfSelector.textContent = param2;
     }
 }

@@ -1,8 +1,8 @@
 export class Card {
-    constructor(name, link, handleCardClick) {
+    constructor(name, link, templateSelector, handleCardClick) {
         this._name = name
         this._link = link
-        this._templateElement = '#template-element'
+        this._templateElement = templateSelector
         this._handleCardClick = handleCardClick
     }
 
@@ -31,10 +31,9 @@ export class Card {
             this._deleteCardHandler(evt)
         })
 
-        this._cardPhoto.addEventListener('click', (evt) => {
-            this._handleCardClick(evt)
+        this._cardPhoto.addEventListener('click', () => {
+            this._handleCardClick(this._name, this._link)
         })
-        console.log(this._handleCardClick)
     }
 
     generateCard() {
@@ -44,8 +43,6 @@ export class Card {
         this._cardPhoto.alt = this._name
         this._element.querySelector(".element__text").textContent = this._name
         this._setEventListeners()
-        // console.log(this._setEventListeners)
-        return this._element;
-        
+        return this._element
     }
 }

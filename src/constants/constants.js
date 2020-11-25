@@ -1,0 +1,13 @@
+export const profileNameSelector = '.profile__name'
+export const profileSelfSelector = '.profile__self'
+export const editButton = document.querySelector('.profile__edit-button')
+export const popupAddOpen = document.querySelector(".profile__add-button")
+export const popupAddImage = ".popup_add-image"
+export const popupEditProfile = ".popup_edit-profile"
+export const popupImage = '.popup-image'
+export const elementContainer = ".elements"
+export const inputEditProfileFormSelector = document.forms.editProfile
+export const inputNameSelector = inputEditProfileFormSelector.elements.name
+export const inputAboutSelector = inputEditProfileFormSelector.elements.about
+export const inputAddImageFormSelector = document.forms.addImage
+export const templateSelector = '#template-element'
