@@ -7,14 +7,6 @@ import { PopupWithImage } from '../components/PopupWithImage.js'
 import { PopupWithForm } from '../components/PopupWithForm.js'
 import { UserInfo } from '../components/UserInfo.js'
 import * as obj from '../constants/constants.js'
-const validationConfig = {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__submit-button',
-    inactiveButtonClass: 'popup__submit-button_disabled',
-    inputErrorClass: 'popup__input_error',
-    errorClass: 'popup__input-error_active'
-  };
   
 function handleCardClick(name, link) {
   imagePopup.open(name, link)
@@ -27,7 +19,7 @@ const cardSection = new Section({
     const newCard = createCard(item.name, item.link)
     cardSection.addItem(newCard)
   }
-}, obj.elementContainer)
+}, obj.elementContainerSelector)
 cardSection.renderItems()
 
 function createCard(name, link) {
@@ -48,20 +40,20 @@ function setUserInfo(paramObj) {
 
 function fillEditFormFields() {
   const { name, about } = fillUserInfo()
-  obj.inputNameSelector.value = name
-  obj.inputAboutSelector.value = about
+  obj.inputName.value = name
+  obj.inputAbout.value = about
 }
 
-const editFormValidator = new FormValidator(validationConfig, obj.inputEditProfileFormSelector)
+const editFormValidator = new FormValidator(obj.validationConfig, obj.inputEditProfileForm)
 editFormValidator.enableValidation()
 
-const addFormValidator = new FormValidator(validationConfig, obj.inputAddImageFormSelector)
+const addFormValidator = new FormValidator(obj.validationConfig, obj.inputAddImageForm)
 addFormValidator.enableValidation()
 
-const imagePopup = new PopupWithImage(obj.popupImage)
+const imagePopup = new PopupWithImage(obj.popupImageSelector)
 imagePopup.setEventListeners()
 
-const editPopup = new PopupWithForm(obj.popupEditProfile, 
+const editPopup = new PopupWithForm(obj.popupEditProfileSelector, 
   (paramObj) => {
     setUserInfo(paramObj)
   })
@@ -73,7 +65,7 @@ function openEditProfilePopup() {
   editPopup.open()
 }
 
-const addPopup = new PopupWithForm(obj.popupAddImage,
+const addPopup = new PopupWithForm(obj.popupAddImageSelector,
   ({param1, param2}) => {
     const newCard = createCard(param1, param2)
     cardSection.addItem(newCard)
@@ -81,7 +73,7 @@ const addPopup = new PopupWithForm(obj.popupAddImage,
   addPopup.setEventListeners()
 
   function openAddCardPopup() {
-    obj.inputAddImageFormSelector.reset()
+    obj.inputAddImageForm.reset()
     addFormValidator.resetState()
     addPopup.open()
   }
