@@ -7,13 +7,21 @@ export class PopupWithImage extends Popup {
         this._header = this._popup.querySelector('.popup-image__text')
     }
 
-    open(name, link) {
+    open(link, name) {
         this._imageItem.setAttribute('alt', name)
         this._imageItem.setAttribute('src', link)
         this._header.textContent = name
         super.open()
     }
 }
+
+// open(link, name) {
+//     console.log(link)
+//     this._imageItem.setAttribute('alt', name)
+//     this._imageItem.setAttribute('src', link)
+//     this._header.textContent = name
+//     super.open()
+// }
 
 
 
