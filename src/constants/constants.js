@@ -24,5 +24,3 @@ export const validationConfig = {
     inputErrorClass: 'popup__input_error',
     errorClass: 'popup__input-error_active'
   }
-// export let userID
-// export const newUserInfo = new UserInfo(profileNameSelector, profileAboutSelector, profileAvatarSelector)
