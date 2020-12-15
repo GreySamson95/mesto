@@ -4,6 +4,7 @@
 @import url("./__text/element__text.css");
 @import url("./__delete/element__delete.css");
 @import url("./__like/_active/element__like_active.css");
+@import url("./__amount/element__amount.css");
 
 .element {
     margin: 0;
@@ -11,8 +12,8 @@
     display: grid;
     align-items: center;
     background: white;
-    width: 282px;
     height: 361px;
     border-radius: 10px;
     position: relative;
+    width: 100%;
 }

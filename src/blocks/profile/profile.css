@@ -4,6 +4,9 @@
 @import url("./__avatar/profile__avatar.css");
 @import url("./__add-button/profile__add-button.css");
 @import url("./__self/profile__self.css");
+@import url("./__edit/profile__edit.css");
+@import url("./__edit-profile/profile__edit-profile.css");
+
 
 .profile {
     padding-top: 35px;

@@ -10,4 +10,5 @@
     overflow: hidden;
     margin: 0;
     max-width: 245px;
+    grid-row: 1/3;
 }

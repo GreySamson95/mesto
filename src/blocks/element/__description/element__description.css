@@ -1,7 +1,13 @@
 .element__description {
-    margin: 25px 18px 31px 21px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    max-width: 246px;
+    background: #fff;
+    height: 79px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 0 10px 10px;
+    column-gap: 10px;
+    padding: 19px;
+    box-sizing: border-box;
 }
