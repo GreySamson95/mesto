@@ -206,7 +206,7 @@ const addPopup = new PopupWithForm(obj.popupAddImageSelector,
                             const cardItem = evt.target
                             const name = cardItem.alt
                             const link = cardItem.src
-                            imagePopup.open(name, link)
+                            imagePopup.open(link, name)
                         },
                         handleLikeClick: (evt) => {
                             handleLikeIconClick(evt)
