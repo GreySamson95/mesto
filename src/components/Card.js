@@ -22,13 +22,13 @@ export class Card {
         return cardTemplate
     }
     
-    _setElementAttr() {
-        const imageItem = this._element.querySelector('.element__photo');
+    _setElementAttr(elemConfig) {
+        const imageItem = this._element.querySelector(elemConfig.photo);
         imageItem.setAttribute('src', this._link)
         imageItem.setAttribute('alt', this._name)
         imageItem.setAttribute('id', this._id)
-        this._element.querySelector('.element__text').textContent = this._name
-        this._element.querySelector('.element__like').textContent = this._likes
+        this._element.querySelector(elemConfig.text).textContent = this._name
+        this._element.querySelector(elemConfig.likes).textContent = this._likes
         if (this._owner !== this._userID) {
             this._element.querySelector('.element__delete').remove()
         }
@@ -37,7 +37,7 @@ export class Card {
                 return this._userID === item._id
             })
             if (this._youLiked) {
-                this._element.querySelector('.element__like').classList.add('element__like_active')
+                this._element.querySelector('.element__like').classList.add('.element__like_active')
             }
         }
     }
@@ -60,11 +60,12 @@ export class Card {
 
     generateCard() {
         this._element = this._getTemplate()
-        this._setElementAttr()
-        this._cardPhoto = this._element.querySelector(".element__photo")
-        this._cardPhoto.src = this._link
-        this._cardPhoto.alt = this._name
-        this._element.querySelector(".element__text").textContent = this._name
+        const elemConfig = {
+            photo: '.element__photo',
+            text: '.element__text',
+            likes: '.element__amount'
+        }
+        this._setElementAttr(elemConfig)
         this._setEventListeners()
         return this._element
     }

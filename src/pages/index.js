@@ -9,79 +9,6 @@ import { UserInfo } from '../components/UserInfo.js'
 import * as obj from '../constants/constants.js'
 import '../pages/index.css'
 
-// function handleCardClick(name, link) {
-//   imagePopup.open(name, link)
-// }
-
-
-// const cardSection = new Section({
-//   items: initialCards,
-//   renderer: (item) => {
-//     const newCard = createCard(item.name, item.link)
-//     cardSection.addItem(newCard)
-//   }
-// }, obj.elementContainerSelector)
-// cardSection.renderItems()
-
-// function createCard(name, link) {
-//   const newCard = new Card(name, link, obj.templateSelector, handleCardClick)
-//   return newCard.generateCard()
-// }
-
-// const newUserInfo = new UserInfo(obj.profileNameSelector, obj.profileAboutSelector)
-
-
-// function fillUserInfo() {
-//   return newUserInfo.getUserInfo()
-// }
-
-// function setUserInfo(paramObj) {
-//   return newUserInfo.setUserInfo(paramObj)
-// }
-
-// function fillEditFormFields() {
-//   const { name, about } = fillUserInfo()
-//   obj.inputName.value = name
-//   obj.inputAbout.value = about
-// }
-
-// const editFormValidator = new FormValidator(obj.validationConfig, obj.inputEditProfileForm)
-// editFormValidator.enableValidation()
-
-// const addFormValidator = new FormValidator(obj.validationConfig, obj.inputAddImageForm)
-// addFormValidator.enableValidation()
-
-// const imagePopup = new PopupWithImage(obj.popupImageSelector)
-// imagePopup.setEventListeners()
-
-// const editPopup = new PopupWithForm(obj.popupEditProfileSelector, 
-//   (paramObj) => {
-//     setUserInfo(paramObj)
-//   })
-// editPopup.setEventListeners()
-
-// function openEditProfilePopup() {
-//   fillEditFormFields()
-//   editFormValidator.resetState()
-//   editPopup.open()
-// }
-
-// const addPopup = new PopupWithForm(obj.popupAddImageSelector,
-//   ({param1, param2}) => {
-//     const newCard = createCard(param1, param2)
-//     cardSection.addItem(newCard)
-//   })
-//   addPopup.setEventListeners()
-
-//   function openAddCardPopup() {
-//     obj.inputAddImageForm.reset()
-//     addFormValidator.resetState()
-//     addPopup.open()
-//   }
-
-// obj.editButton.addEventListener('click', openEditProfilePopup)
-// obj.popupAddOpen.addEventListener('click', openAddCardPopup)
-///////////////////////////////////////
 const newUserInfo = new UserInfo(obj.profileNameSelector, obj.profileAboutSelector, obj.profileAvatarSelector)
 
 function setUserInfo(paramObj) {
@@ -95,17 +22,8 @@ function fillUserInfo() {
 const confirmPopup = new PopupWithSubmit(obj.popupConfirm, {
     handleCardClick: (evt) => {
         const photoID = evt.target.nextElementSibling.id
-        api.deletePhoto(photoID)
-            .then((response) => {
-                if (response.ok) {
-                    handleDeleteIconClick(evt)
-                    return response.json()
-                }
-                return Promise.reject(`Ошибка: ${res.status}`)
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+        api.deletePhoto(photoID) 
+        handleDeleteIconClick(evt)
     }
 })
 confirmPopup.setEventListeners()
@@ -127,12 +45,6 @@ const editPopup = new PopupWithForm(obj.popupEditProfileSelector,
     (paramObj) => {
         renderLoading(obj.popupEditProfileSelector, true)
         api.updateInformation(paramObj)
-            .then((res) => {
-                if (res.ok) {
-                    return res.json()
-                }
-                return Promise.reject(`Что-то пошло не так: ${res.status}`)
-            })
             .then((data) => {
                 setUserInfo(data)
                 editPopup.close()
@@ -154,12 +66,6 @@ function handleLikeIconClick(evt) {
     const countOfLike = element.querySelector('.element__amount')
     if (isLiked) {
         api.unlikePhoto(photoID)
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-                return Promise.reject(`Что-то пошло не так: ${res.status}`)
-            })
             .then((data) => {
                 countOfLike.textContent = data.likes.length;
                 evt.target.classList.remove('element__like_active')
@@ -169,12 +75,6 @@ function handleLikeIconClick(evt) {
             })
     } else {
         api.likePhoto(photoID)
-            .then((res) => {
-                if (res.ok) {
-                    return res.json()
-                }
-                return Promise.reject(`Что-то пошло не так: ${res.status}`)
-            })
             .then((data) => {
                 countOfLike.textContent = data.likes.length
                 evt.target.classList.add('element__like_active')
@@ -191,12 +91,6 @@ const addPopup = new PopupWithForm(obj.popupAddImageSelector,
         (paramObj) => {
             renderLoading(obj.popupAddImageSelector, true);
             api.postPhoto(paramObj)
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json()
-                    }
-                    return Promise.reject(`Ошибка: ${res.status}`)
-                })
                 .then((data) => {
                     addPopup.close()
                     data.userID = userID;
@@ -233,12 +127,6 @@ const updateAvatarPopup = new PopupWithForm(obj.popupUpdateAvatar,
         (paramObj) => {
             renderLoading(obj.popupUpdateAvatar, true)
             api.updateAvatar(paramObj)
-                .then((res) => {
-                    if (res.ok) {
-                        return res.json()
-                    }
-                    return Promise.reject(`Что-то пошло не так: ${res.status}`)
-                })
                 .then((data) => {
                     setUserInfo(data)
                     updateAvatarPopup.close()
@@ -252,6 +140,34 @@ const updateAvatarPopup = new PopupWithForm(obj.popupUpdateAvatar,
         }
 )
 updateAvatarPopup.setEventListeners()
+
+// const createCard = ({ data }) => {
+//     const newCard = new Card({ 
+//         data: {
+//             "name": item.name,
+//             "link": item.link,
+//             "likes": item.likes,
+//             "_id": item._id,
+//             "owner": item.owner,
+//             "userID": userID,
+//             "whoLiked": item.likes
+//         },
+//         handleCardClick: (evt) => {
+//             const cardItem = evt.target
+//             const link = cardItem.src
+//             const name = cardItem.alt
+//             imagePopup.open(link, name)
+//         },
+//         handleLikeClick: (evt) => {
+//             handleLikeIconClick(evt)
+//         },
+//         handleDeleteIconClick: (evt) => {
+//             confirmPopup.open()
+//             confirmPopup.chooseFunc(evt)
+//         }
+//     }, obj.templateSelector)
+//     return newCard
+// }
 
 function getNewCardSection(initialCards) {
         const cardSection = new Section({
@@ -281,6 +197,7 @@ function getNewCardSection(initialCards) {
                         confirmPopup.chooseFunc(evt)
                     }
                 }, obj.templateSelector)
+                // const newCard = createCard(data)
                 cardSection.addItem(newCard.generateCard())
             }
         }, obj.elementContainerSelector)

@@ -1,36 +1,34 @@
 export class Api {
     constructor(options) {
-
+        this._url = 'https://mesto.nomoreparties.co/v1/cohort-18/'
+        this._auth = '66264c4a-1a87-4c46-9ef9-8541779913f9'
     }
 
+    _getResponseData(res) {
+        if (res.ok) {
+            return res.json()
+        }
+        return Promise.reject(`Ошибка: ${res.status}`)
+    }  
+
     getInitialCards() {
-        return fetch('https://mesto.nomoreparties.co/v1/cohort-18/cards', {
+        return fetch(`${this._url}cards`, {
                 headers: {
-                    authorization: '66264c4a-1a87-4c46-9ef9-8541779913f9',
+                    authorization: this._auth,
                     'Content-Type': 'application/json'
                 }
             })
-            .then(res => {
-                if (res.ok) {
-                    return res.json()
-                }
-                return Promise.reject(`Ошибка: ${res.status}`)
-            })
+            .then(this._getResponseData)
     }
 
     getInformation() {
-        return fetch('https://mesto.nomoreparties.co/v1/cohort-18/users/me', {
+        return fetch(`${this._url}users/me`, {
                 headers: {
-                    authorization: '66264c4a-1a87-4c46-9ef9-8541779913f9',
+                    authorization: this._auth,
                     'Content-Type': 'application/json'
                 }
             })
-            .then(res => {
-                if (res.ok) {
-                    return res.json()
-                }
-                return Promise.reject(`Ошибка: ${res.status}`)
-            })
+            .then(this._getResponseData)
     }
 
     getAllNeededData() {
@@ -38,10 +36,10 @@ export class Api {
     }
 
     updateInformation({ name, about }) {
-        return fetch('https://mesto.nomoreparties.co/v1/cohort-18/users/me', {
+        return fetch(`${this._url}users/me`, {
             method: 'PATCH',
             headers: {
-                authorization: '66264c4a-1a87-4c46-9ef9-8541779913f9',
+                authorization: this._auth,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -49,26 +47,28 @@ export class Api {
                 about: about
             })
         })
+        .then(this._getResponseData)
     }
 
     updateAvatar({ avatar }) {
-        return fetch('https://mesto.nomoreparties.co/v1/cohort-18/users/me/avatar', {
+        return fetch(`${this._url}users/me/avatar`, {
             method: 'PATCH',
             headers: {
-                authorization: '66264c4a-1a87-4c46-9ef9-8541779913f9',
+                authorization: this._auth,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 avatar: avatar
             })
         })
+        .then(this._getResponseData)
     }
 
     postPhoto({ name, link }) {
-        return fetch('https://mesto.nomoreparties.co/v1/cohort-18/cards', {
+        return fetch(`${this._url}cards`, {
             method: 'POST',
             headers: {
-                authorization: '66264c4a-1a87-4c46-9ef9-8541779913f9',
+                authorization: this._auth,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -76,35 +76,39 @@ export class Api {
                 link: link
             })
         })
+        .then(this._getResponseData)
     }
 
     deletePhoto(id) {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-18/cards/${id}`, {
+        return fetch(`${this._url}cards/${id}`, {
             method: 'DELETE',
             headers: {
-                authorization: '66264c4a-1a87-4c46-9ef9-8541779913f9',
+                authorization: this._auth,
                 'Content-Type': 'application/json'
             }
         })
+        .then(this._getResponseData)
     }
 
     likePhoto(id) {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-18/cards/likes/${id}`, {
+        return fetch(`${this._url}cards/likes/${id}`, {
             method: 'PUT',
             headers: {
-                authorization: '66264c4a-1a87-4c46-9ef9-8541779913f9',
+                authorization: this._auth,
                 'Content-Type': 'application/json'
             }
         })
+        .then(this._getResponseData)
     }
 
     unlikePhoto(id) {
-        return fetch(`https://mesto.nomoreparties.co/v1/cohort-18/cards/likes/${id}`, {
+        return fetch(`${this._url}cards/likes/${id}`, {
             method: 'DELETE',
             headers: {
-                authorization: '66264c4a-1a87-4c46-9ef9-8541779913f9',
+                authorization: this._auth,
                 'Content-Type': 'application/json'
             }
         })
+        .then(this._getResponseData)
     }
 }
