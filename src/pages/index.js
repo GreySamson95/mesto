@@ -12,7 +12,7 @@ import '../pages/index.css'
 const newUserInfo = new UserInfo(obj.profileNameSelector, obj.profileAboutSelector, obj.profileAvatarSelector)
 
 function setUserInfo(paramObj) {
-      return newUserInfo.setUserInfo(paramObj)
+    return newUserInfo.setUserInfo(paramObj)
 }
 
 function fillUserInfo() {
@@ -20,10 +20,11 @@ function fillUserInfo() {
 }
 
 const confirmPopup = new PopupWithSubmit(obj.popupConfirm, {
-    handleCardClick: (evt) => {
-        const photoID = evt.target.nextElementSibling.id
-        api.deletePhoto(photoID) 
-        handleDeleteIconClick(evt)
+    handleCardClick: (card) => {
+        api.deletePhoto(card._id)
+            .then((res) => {
+        card.removeCard()
+        confirmPopup.close()})
     }
 })
 confirmPopup.setEventListeners()
@@ -59,32 +60,6 @@ const editPopup = new PopupWithForm(obj.popupEditProfileSelector,
 )
 editPopup.setEventListeners()
 
-function handleLikeIconClick(evt) {
-    const element = evt.target.closest('.element')
-    const isLiked = evt.target.classList.contains('element__like_active')
-    const photoID = element.querySelector('.element__photo').id
-    const countOfLike = element.querySelector('.element__amount')
-    if (isLiked) {
-        api.unlikePhoto(photoID)
-            .then((data) => {
-                countOfLike.textContent = data.likes.length;
-                evt.target.classList.remove('element__like_active')
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    } else {
-        api.likePhoto(photoID)
-            .then((data) => {
-                countOfLike.textContent = data.likes.length
-                evt.target.classList.add('element__like_active')
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    }
-}
-
 let userID
 
 const addPopup = new PopupWithForm(obj.popupAddImageSelector,
@@ -94,22 +69,7 @@ const addPopup = new PopupWithForm(obj.popupAddImageSelector,
                 .then((data) => {
                     addPopup.close()
                     data.userID = userID;
-                    const newCard = new Card({
-                        data: data,
-                        handleCardClick: (evt) => {
-                            const cardItem = evt.target
-                            const name = cardItem.alt
-                            const link = cardItem.src
-                            imagePopup.open(link, name)
-                        },
-                        handleLikeClick: (evt) => {
-                            handleLikeIconClick(evt)
-                        },
-                        handleDeleteIconClick: (evt) => {
-                            confirmPopup.open();
-                            confirmPopup.chooseFunc(evt)
-                        }
-                    }, obj.templateSelector)
+                    const newCard = createCard(data);
                     getNewCardSection().addItem(newCard.generateCard())
                 })
                 .catch((err) => {
@@ -122,7 +82,6 @@ const addPopup = new PopupWithForm(obj.popupAddImageSelector,
 )
 
 addPopup.setEventListeners()
-
 const updateAvatarPopup = new PopupWithForm(obj.popupUpdateAvatar,
         (paramObj) => {
             renderLoading(obj.popupUpdateAvatar, true)
@@ -136,68 +95,57 @@ const updateAvatarPopup = new PopupWithForm(obj.popupUpdateAvatar,
                 })
                 .finally(() => {
                     renderLoading(obj.popupUpdateAvatar, false)
-                });
+                })
         }
 )
+
 updateAvatarPopup.setEventListeners()
 
-// const createCard = ({ data }) => {
-//     const newCard = new Card({ 
-//         data: {
-//             "name": item.name,
-//             "link": item.link,
-//             "likes": item.likes,
-//             "_id": item._id,
-//             "owner": item.owner,
-//             "userID": userID,
-//             "whoLiked": item.likes
-//         },
-//         handleCardClick: (evt) => {
-//             const cardItem = evt.target
-//             const link = cardItem.src
-//             const name = cardItem.alt
-//             imagePopup.open(link, name)
-//         },
-//         handleLikeClick: (evt) => {
-//             handleLikeIconClick(evt)
-//         },
-//         handleDeleteIconClick: (evt) => {
-//             confirmPopup.open()
-//             confirmPopup.chooseFunc(evt)
-//         }
-//     }, obj.templateSelector)
-//     return newCard
-// }
+
+function createCard (data) {
+    const card = new Card({
+    data,
+    handleCardClick: (evt) => {
+        const cardItem = evt.target
+        const link = cardItem.src
+        const name = cardItem.alt
+        imagePopup.open(link, name)
+    },
+    handleLikeClick: (evt) => {
+        const isLiked = evt.target.classList.contains('element__like_active')
+        if (isLiked) {
+            api.unlikePhoto(data._id)
+                .then((data) => {
+                    card.handleDisLike()
+                    card.setNumberOfLikes(data.likes.length)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        } else {
+            api.likePhoto(data._id)
+                .then((data) => {
+                    card.handleAddLike()
+                    card.setNumberOfLikes(data.likes.length)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+    },
+    handleDeleteIconClick: (evt) => {
+        confirmPopup.open()
+        confirmPopup.chooseFunc(card);
+    },
+}, userID, obj.templateSelector)
+return card;
+}
 
 function getNewCardSection(initialCards) {
         const cardSection = new Section({
             items: initialCards,
             renderer: (item) => {
-                const newCard = new Card({
-                    data: {
-                        "name": item.name,
-                        "link": item.link,
-                        "likes": item.likes,
-                        "_id": item._id,
-                        "owner": item.owner,
-                        "userID": userID,
-                        "whoLiked": item.likes
-                    },
-                    handleCardClick: (evt) => {
-                        const cardItem = evt.target
-                        const link = cardItem.src
-                        const name = cardItem.alt
-                        imagePopup.open(link, name)
-                    },
-                    handleLikeClick: (evt) => {
-                        handleLikeIconClick(evt)
-                    },
-                    handleDeleteIconClick: (evt) => {
-                        confirmPopup.open()
-                        confirmPopup.chooseFunc(evt)
-                    }
-                }, obj.templateSelector)
-                // const newCard = createCard(data)
+                const newCard = createCard(item)
                 cardSection.addItem(newCard.generateCard())
             }
         }, obj.elementContainerSelector)
@@ -229,19 +177,12 @@ api.getAllNeededData()
     })
     .catch((err) => {
         console.log(err)
-    });
-
-function handleDeleteIconClick(evt) {
-    evt.target.closest('.element').remove()
-    confirmPopup.close()
-}
+    })
 
 const editFormValidator = new FormValidator(obj.validationConfig, obj.inputEditProfileForm)
 editFormValidator.enableValidation()
-  
 const addFormValidator = new FormValidator(obj.validationConfig, obj.inputAddImageForm)
 addFormValidator.enableValidation()
-  
 const updateAvatarValidator = new FormValidator(obj.validationConfig, obj.inputUpdateAvatardForm)
 updateAvatarValidator.enableValidation()
 
@@ -256,7 +197,7 @@ function openEditProfilePopup() {
     editFormValidator.resetState()
     editPopup.open()
 }
-  
+
 function openAddCardPopup() {
       obj.inputAddImageForm.reset()
       addFormValidator.resetState()
@@ -268,7 +209,7 @@ function openUpdateAvatarPopup() {
     updateAvatarValidator.resetState()
     updateAvatarPopup.open()
 }
-  
+
   obj.editButton.addEventListener('click', openEditProfilePopup)
   obj.popupAddOpen.addEventListener('click', openAddCardPopup)
   obj.updateAvatarButton.addEventListener('click', openUpdateAvatarPopup)
