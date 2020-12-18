@@ -11,6 +11,33 @@ import '../pages/index.css'
 
 const newUserInfo = new UserInfo(obj.profileNameSelector, obj.profileAboutSelector, obj.profileAvatarSelector)
 
+const api = new Api({
+    baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-18/cards',
+    headers: {
+        authorization: '66264c4a-1a87-4c46-9ef9-8541779913f9',
+        'Content-Type': 'application/json'
+    }
+})
+
+api.getAllNeededData()
+    .then((result) => {
+        const [dataFromFirstPromise, dataFromSecondPromise] = result
+        userID = dataFromFirstPromise._id
+        setUserInfo({
+            "name": dataFromFirstPromise.name,
+            "about": dataFromFirstPromise.about,
+            "avatar": dataFromFirstPromise.avatar
+        })
+        return dataFromSecondPromise
+    })
+    .then((dataFromSecondPromise) => {
+        const initialCards = dataFromSecondPromise
+        getNewCardSection(initialCards).renderItems()
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+    
 function setUserInfo(paramObj) {
     return newUserInfo.setUserInfo(paramObj)
 }
@@ -117,7 +144,7 @@ function createCard (data) {
             api.unlikePhoto(data._id)
                 .then((data) => {
                     card.handleDisLike()
-                    card.setNumberOfLikes(data.likes.length)
+                    card.isLiked(data)
                 })
                 .catch((err) => {
                     console.log(err)
@@ -126,7 +153,7 @@ function createCard (data) {
             api.likePhoto(data._id)
                 .then((data) => {
                     card.handleAddLike()
-                    card.setNumberOfLikes(data.likes.length)
+                    card.isLiked(data)
                 })
                 .catch((err) => {
                     console.log(err)
@@ -152,32 +179,7 @@ function getNewCardSection(initialCards) {
         return cardSection
 }
 
-const api = new Api({
-    baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-18/cards',
-    headers: {
-        authorization: '66264c4a-1a87-4c46-9ef9-8541779913f9',
-        'Content-Type': 'application/json'
-    }
-})
 
-api.getAllNeededData()
-    .then((result) => {
-        const [dataFromFirstPromise, dataFromSecondPromise] = result
-        userID = dataFromFirstPromise._id
-        setUserInfo({
-            "name": dataFromFirstPromise.name,
-            "about": dataFromFirstPromise.about,
-            "avatar": dataFromFirstPromise.avatar
-        })
-        return dataFromSecondPromise
-    })
-    .then((dataFromSecondPromise) => {
-        const initialCards = dataFromSecondPromise
-        getNewCardSection(initialCards).renderItems()
-    })
-    .catch((err) => {
-        console.log(err)
-    })
 
 const editFormValidator = new FormValidator(obj.validationConfig, obj.inputEditProfileForm)
 editFormValidator.enableValidation()

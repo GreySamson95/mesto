@@ -30,13 +30,16 @@ export class Card {
         if (this._owner !== this._userID) {
             this._element.querySelector('.element__delete').remove()
         }
-        if (this._whoLiked) {
-            this._youLiked = this._whoLiked.some((item) => {
-                return this._userID === item._id
-            })
-            if (this._youLiked) {
-                this._element.querySelector('.element__like').classList.add('.element__like_active')
-            }
+        // if (this._whoLiked) {
+        //     this._youLiked = this._whoLiked.some((item) => {
+        //         return this._userID === item._id
+        //     })
+        //     if (this._youLiked) {
+        //         this._element.querySelector('.element__like').classList.add('element__like_active')
+        //     }
+        // }
+        if (this.isLiked) {
+            this._element.querySelector('.element__like').classList.add('element__like_active')
         }
     }
     _setEventListeners() {
@@ -75,8 +78,13 @@ export class Card {
         this._element.querySelector('.element__amount').textContent = this._likes += 1
         this._element.querySelector('.element__like').classList.add('element__like_active')
     }
-    setNumberOfLikes(amount) {
-        this._likes.textContent = amount
+    // setNumberOfLikes() {
+    //     this._element.querySelector('.element__amount').textContent = this._likes
+    // }
+    isLiked() {
+        this._cardLikes.some((item) => {
+                this._userID == item._id
+            })
     }
     
 }
