@@ -77,7 +77,7 @@ export class Card {
     } 
 
     setNumberOfLikes(amount) { 
-        this._element.querySelector('.element__amount').textContent = amount 
+        this._likes.textContent = amount 
     } 
      
 }
