@@ -127,46 +127,7 @@ const updateAvatarPopup = new PopupWithForm(obj.popupUpdateAvatar,
 )
 
 updateAvatarPopup.setEventListeners()
-
-
-// function createCard (data) { 
-//     const card = new Card({ 
-//     data, 
-//     handleCardClick: (evt) => { 
-//         const cardItem = evt.target 
-//         const link = cardItem.src 
-//         const name = cardItem.alt 
-//         imagePopup.open(link, name) 
-//     }, 
-//     handleLikeClick: (evt) => { 
-//         const isLiked = evt.target.classList.contains('element__like_active') 
-//         if (isLiked) { 
-//             api.unlikePhoto(data._id) 
-//                 .then((data) => { 
-//                     card.handleDisLike() 
-//                     card.setNumberOfLikes(data.likes.length) 
-//                 }) 
-//                 .catch((err) => { 
-//                     console.log(err) 
-//                 }) 
-//         } else { 
-//             api.likePhoto(data._id) 
-//                 .then((data) => { 
-//                     card.handleAddLike() 
-//                     card.setNumberOfLikes(data.likes.length) 
-//                 }) 
-//                 .catch((err) => { 
-//                     console.log(err) 
-//                 }) 
-//         } 
-//     }, 
-//     handleDeleteIconClick: (evt) => { 
-//         confirmPopup.open() 
-//         confirmPopup.chooseFunc(card); 
-//     }, 
-// }, userID, obj.templateSelector) 
-// return card; 
-// } 
+ 
 function createCard (data) {
     const card = new Card({
     data,
@@ -190,6 +151,7 @@ function createCard (data) {
         } else {
             api.likePhoto(data._id)
                 .then((data) => {
+                    // console.log(data)
                     card.handleAddLike()
                     card.isLiked(data)
                 })
