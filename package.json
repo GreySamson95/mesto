@@ -15,6 +15,7 @@
   },
   "author": "Sergey Borodavkin",
   "license": "ISC",
+  "homepage": "https://github.com/your_link/mesto#readme",
   "devDependencies": {
     "@babel/core": "^7.12.7",
     "@babel/preset-env": "^7.12.7",
