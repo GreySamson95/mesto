@@ -7,7 +7,6 @@ export class Card {
         this._id = data._id
         this._owner = data.owner._id
         this._userID = userID
-        this._whoLiked = data.whoLiked
         this._handleCardClick = handleCardClick
         this._handleLikeClick = handleLikeClick
         this._handleDeleteIconClick = handleDeleteIconClick
