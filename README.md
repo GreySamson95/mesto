@@ -7,8 +7,8 @@
 * Flexbox,
 * Validation;
 
-* [Ссылка на проект] (https://greysamson95.github.io/mesto/index.html)
+* [Ссылка на проект](https://greysamson95.github.io/mesto/index.html)
 
-* [Ссылка на сайт] (https://greysamson95.github.io/mesto/)
+* [Ссылка на сайт](https://greysamson95.github.io/mesto/)
 
 
